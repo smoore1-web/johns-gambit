@@ -32,10 +32,10 @@ export async function puzzles() {
   if (src.masters) pool = pool.concat(await masters());
   if (src.lichess) pool = pool.concat(await lichess());
   if (src.mine) pool = pool.concat(mine());
-  if (pool.length < 50) {
-    // too few to train with: quietly add the other bundled sets
+  if (pool.length < 400) {
+    // the master collection is still growing: top up with the other bundled sets
     if (!src.masters) pool = pool.concat(await masters());
-    if (pool.length < 50 && !src.lichess) pool = pool.concat(await lichess());
+    if (pool.length < 400 && !src.lichess) pool = pool.concat(await lichess());
   }
   return pool;
 }

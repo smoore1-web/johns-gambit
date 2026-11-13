@@ -1,0 +1,56 @@
+name: Grow master-game puzzles
+
+# Mines more puzzles from historical master games every 6 hours, adds them to
+# web/data/masters.json, then starts a fresh APK build. The collection keeps
+# growing until every downloaded game has been mined.
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: mine
+  cancel-in-progress: false
+
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Get Stockfish (fast official build)
+        run: |
+          curl -sSL -o sf.tar https://github.com/official-stockfish/Stockfish/releases/download/sf_17.1/stockfish-ubuntu-x86-64-avx2.tar
+          tar -xf sf.tar
+          SF=$(find stockfish -type f -name 'stockfish-ubuntu-x86-64-avx2' | head -1)
+          chmod +x "$SF"
+          echo "SF=$PWD/$SF" >> "$GITHUB_ENV"
+          pip install chess
+
+      - name: Mine puzzles (about 110 minutes)
+        run: |
+          python scripts/build_masters.py web/data/masters.json --engine "$SF" \
+            --existing web/data/masters.json --done data/mined_games.txt --minutes 110 --per-player 400
+
+      - name: Save the bigger collection
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/data/masters.json data/mined_games.txt
+          if git diff --cached --quiet; then echo "Nothing new"; exit 0; fi
+          N=$(python -c "import json;print(len(json.load(open('web/data/masters.json'))))")
+          git commit -m "More master-game puzzles ($N total)"
+          git pull --rebase -q origin main
+          git push origin HEAD:main
+          gh workflow run build.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -252,7 +252,9 @@ register('options', (el) => {
       h('div', { class: 'toggle' }, h('span', {}, 'Master games'), seg([[true, 'On'], [false, 'Off']], set.sources.masters, (v) => (set.sources.masters = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'My puzzles'), seg([[true, 'On'], [false, 'Off']], set.sources.mine, (v) => (set.sources.mine = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Extra pack (Lichess)'), seg([[true, 'On'], [false, 'Off']], set.sources.lichess, (v) => (set.sources.lichess = v))),
-      h('p', { class: 'para dim', style: 'font-size:19px' }, 'Master-game puzzles are the main set. The extra pack adds thousands more for drills and Rush.')),
+      (() => { const p = h('p', { class: 'para dim', style: 'font-size:19px' }, 'Master-game puzzles are the main set. The extra pack adds thousands more for drills and Rush.');
+        D.masters().then((m) => { p.textContent = `Master collection: ${m.length} puzzles — it grows with every update. Until it passes 400, the extra pack tops it up automatically.`; });
+        return p; })()),
     win('YOUR DATA', h('p', { class: 'para' }, 'Progress is saved on this phone. Make a backup before reinstalling.'),
       menu([
         { label: 'SAVE BACKUP', onClick: () => {

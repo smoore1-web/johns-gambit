@@ -250,7 +250,7 @@ def mine_game(engine, game):
         # position k: solver to move after opponent's move k-1
         before = -evals[k - 1]   # solver's view before the opponent moved
         after = evals[k]          # solver's view after the opponent's move
-        if before > 150 or before < -300 or after < 150 or after - before < 150:
+        if before > 200 or before < -300 or after < 120 or after - before < 120:
             continue
         pos = positions[k]
         best, bcp, uniq = unique_best(engine, pos)
@@ -299,14 +299,14 @@ def mine_game(engine, game):
 
 
 def worker_batch(args):
-    engine_path, texts, deadline = args
+    engine_path, items, deadline = args
     engine = chess.engine.SimpleEngine.popen_uci(engine_path)
     try:
         engine.configure({"Threads": 1, "Hash": 32})
     except Exception:
         pass
-    out = []
-    for t in texts:
+    out, processed = [], []
+    for key, t in items:
         if time.time() > deadline:
             break
         try:
@@ -315,8 +315,9 @@ def worker_batch(args):
                 out += mine_game(engine, g)
         except Exception as e:
             print("  skipped a game:", e, flush=True)
+        processed.append(key)
     engine.quit()
-    return out
+    return out, processed
 
 
 def main():
@@ -327,6 +328,8 @@ def main():
     ap.add_argument("--per-player", type=int, default=120)
     ap.add_argument("--procs", type=int, default=os.cpu_count() or 2)
     ap.add_argument("--minutes", type=float, default=75, help="time budget for mining")
+    ap.add_argument("--existing", help="merge with this masters.json (grows the collection run by run)")
+    ap.add_argument("--done", help="file listing games already mined (updated in place)")
     a = ap.parse_args()
 
     games = []
@@ -351,23 +354,44 @@ def main():
         if key not in seen:
             seen.add(key)
             uniq.append(g)
+    def gkey(g):
+        h = g.headers
+        return hashlib.md5(f"{h.get('White')}|{h.get('Black')}|{h.get('Date')}|{h.get('Round')}|{len(list(g.mainline_moves()))}".encode()).hexdigest()[:12]
+    done = set()
+    if a.done and os.path.exists(a.done):
+        done = set(open(a.done).read().split())
+    uniq = [g for g in uniq if gkey(g) not in done]
+    random.Random(len(done)).shuffle(uniq)
     texts = [str(g) for g in uniq]
+    keys = [gkey(g) for g in uniq]
     print(f"Mining {len(texts)} games with {a.procs} engines...", flush=True)
-    random.Random(7).shuffle(texts)  # mix players so a time cut-off still covers everyone
     deadline = time.time() + a.minutes * 60
-    chunks = [texts[i::a.procs] for i in range(a.procs)]
-    results = []
+    items = list(zip(keys, texts))
+    chunks = [items[i::a.procs] for i in range(a.procs)]
+    results, mined_keys = [], []
     with mp.Pool(a.procs) as pool:
-        for i, r in enumerate(pool.imap_unordered(worker_batch, [(a.engine, c, deadline) for c in chunks])):
+        for i, (r, pk) in enumerate(pool.imap_unordered(worker_batch, [(a.engine, c, deadline) for c in chunks])):
             results += r
+            mined_keys += pk
             print(f"  batch {i + 1}/{len(chunks)} done, {len(results)} puzzles so far", flush=True)
-    by_id = {r[0]: r for r in results}
+    by_id = {}
+    if a.existing and os.path.exists(a.existing):
+        for r in json.load(open(a.existing)):
+            by_id[r[0]] = r
+    before_n = len(by_id)
+    for r in results:
+        by_id[r[0]] = r
+    if a.done:
+        with open(a.done, "a") as f:
+            for k in mined_keys:
+                f.write(k + "\n")
+    print(f"Mined {len(mined_keys)} games; new puzzles this run: {len(by_id) - before_n}")
     data = sorted(by_id.values(), key=lambda x: x[3])
     with open(a.out, "w") as f:
         json.dump(data, f, separators=(",", ":"))
     print(f"Kept {len(data)} master puzzles -> {a.out}")
-    if not a.pgn and len(data) < 300:
-        sys.exit("Too few master puzzles; downloads probably failed.")
+    if not a.pgn and len(results) == 0 and not texts:
+        sys.exit("No games to mine; downloads probably failed.")
 
 
 if __name__ == "__main__":

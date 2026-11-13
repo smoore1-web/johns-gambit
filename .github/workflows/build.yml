@@ -3,6 +3,8 @@ name: Build John's Gambit APK
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "data/mined_games.txt"
   workflow_dispatch:
 
 jobs:
@@ -30,28 +32,10 @@ jobs:
           mkdir -p puzzle-cache
           python scripts/build_puzzles.py puzzle-cache/puzzles.json
 
-      # Master-game puzzles: mined from historical games with Stockfish (slow the first time, then cached)
-      - name: Restore master puzzle cache
-        id: masters
-        uses: actions/cache@v4
-        with:
-          path: masters-cache/masters.json
-          key: masters-${{ hashFiles('scripts/build_masters.py') }}
-
-      - name: Mine puzzles from master games
-        if: steps.masters.outputs.cache-hit != 'true'
-        continue-on-error: true
-        timeout-minutes: 120
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq stockfish
-          pip install chess
-          mkdir -p masters-cache
-          python scripts/build_masters.py masters-cache/masters.json --engine /usr/games/stockfish
-
-      - name: Use the full puzzle sets
-        run: |
-          cp puzzle-cache/puzzles.json web/data/puzzles.json
-          if [ -s masters-cache/masters.json ]; then cp masters-cache/masters.json web/data/masters.json; else echo "Master puzzles unavailable; keeping the starter set"; fi
+      # Master-game puzzles are already in the repo (web/data/masters.json),
+      # grown every 6 hours by the "Grow master-game puzzles" workflow.
+      - name: Use the full Lichess extra pack
+        run: cp puzzle-cache/puzzles.json web/data/puzzles.json
 
       - name: Copy the game into the app
         run: |
