@@ -41,7 +41,7 @@ jobs:
       - name: Mine puzzles from master games
         if: steps.masters.outputs.cache-hit != 'true'
         continue-on-error: true
-        timeout-minutes: 300
+        timeout-minutes: 120
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq stockfish
           pip install chess

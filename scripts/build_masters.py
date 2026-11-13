@@ -23,6 +23,7 @@ import os
 import random
 import re
 import sys
+import time
 import urllib.request
 import zipfile
 
@@ -42,7 +43,7 @@ PLAYERS = [
 URL = "https://www.pgnmentor.com/players/{}.zip"
 VAL = {chess.PAWN: 1, chess.KNIGHT: 3, chess.BISHOP: 3, chess.ROOK: 5, chess.QUEEN: 9, chess.KING: 0}
 
-QUICK = chess.engine.Limit(nodes=150000)
+QUICK = chess.engine.Limit(nodes=60000)
 DEEP = chess.engine.Limit(nodes=1500000)
 
 
@@ -298,7 +299,7 @@ def mine_game(engine, game):
 
 
 def worker_batch(args):
-    engine_path, texts = args
+    engine_path, texts, deadline = args
     engine = chess.engine.SimpleEngine.popen_uci(engine_path)
     try:
         engine.configure({"Threads": 1, "Hash": 32})
@@ -306,6 +307,8 @@ def worker_batch(args):
         pass
     out = []
     for t in texts:
+        if time.time() > deadline:
+            break
         try:
             g = chess.pgn.read_game(io.StringIO(t))
             if g:
@@ -321,8 +324,9 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--engine", default="stockfish")
     ap.add_argument("--pgn", nargs="*")
-    ap.add_argument("--per-player", type=int, default=90)
+    ap.add_argument("--per-player", type=int, default=120)
     ap.add_argument("--procs", type=int, default=os.cpu_count() or 2)
+    ap.add_argument("--minutes", type=float, default=75, help="time budget for mining")
     a = ap.parse_args()
 
     games = []
@@ -349,10 +353,12 @@ def main():
             uniq.append(g)
     texts = [str(g) for g in uniq]
     print(f"Mining {len(texts)} games with {a.procs} engines...", flush=True)
-    chunks = [texts[i::a.procs * 4] for i in range(a.procs * 4)]
+    random.Random(7).shuffle(texts)  # mix players so a time cut-off still covers everyone
+    deadline = time.time() + a.minutes * 60
+    chunks = [texts[i::a.procs] for i in range(a.procs)]
     results = []
     with mp.Pool(a.procs) as pool:
-        for i, r in enumerate(pool.imap_unordered(worker_batch, [(a.engine, c) for c in chunks])):
+        for i, r in enumerate(pool.imap_unordered(worker_batch, [(a.engine, c, deadline) for c in chunks])):
             results += r
             print(f"  batch {i + 1}/{len(chunks)} done, {len(results)} puzzles so far", flush=True)
     by_id = {r[0]: r for r in results}
