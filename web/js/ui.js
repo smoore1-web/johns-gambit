@@ -1,5 +1,14 @@
 // Small UI helpers: element builder, router, toasts and retro sounds.
 import { state } from './store.js';
+import * as music from './music.js';
+
+// Music starts after the first tap (phones block sound before any touch).
+let unlocked = false, wantSong = null;
+document.addEventListener('pointerdown', () => {
+  if (unlocked) return;
+  unlocked = true;
+  if (wantSong) music.play(wantSong);
+}, { capture: true });
 
 export function h(tag, attrs = {}, ...kids) {
   const el = document.createElement(tag);
@@ -55,6 +64,8 @@ export function refresh() { show(); }
 function show() {
   if (cleanup) { try { cleanup(); } catch (e) { /* ignore */ } cleanup = null; }
   const top = stack[stack.length - 1];
+  wantSong = music.songFor(top.name);
+  if (unlocked) music.play(wantSong);
   root.innerHTML = '';
   const el = h('div', { class: 'screen' });
   root.appendChild(el);

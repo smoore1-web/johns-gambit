@@ -16,7 +16,7 @@ const fresh = () => ({
   records: { rush3: 0, rush5: 0, solved: 0, hardest: 0, cleanRun: 0, bestCleanRun: 0, endgames: 0, lines: 0 },
   repertoire: { white: [], black: [] },
   history: [],         // [{d: 'YYYY-MM-DD', ok, fail}] last 60 days
-  settings: { explain: 'auto', sound: true, coords: true, sessionMin: 10, blindMode: 'hidden', night: false, sources: { masters: true, lichess: false, mine: true } },
+  settings: { explain: 'auto', sound: true, coords: true, sessionMin: 10, blindMode: 'hidden', night: false, music: true, musicVol: 0.5, sources: { masters: true, lichess: false, mine: true } },
   custom: [],          // puzzles you added yourself
   badges: {},
 });

@@ -8,6 +8,7 @@ import { playEndgame } from './endgames.js';
 import { THEME_LABEL } from './explain.js';
 import { warmUp } from './engine.js';
 import './mypuzzles.js';
+import * as music from './music.js';
 
 // ---------- title ----------
 register('title', (el) => {
@@ -245,7 +246,9 @@ register('options', (el) => {
     win('OPTIONS',
       h('div', { class: 'toggle' }, h('span', {}, 'Explanations'), seg([['auto', 'Auto'], ['beginner', 'Simple'], ['intermediate', 'Medium'], ['advanced', 'Expert']], set.explain, (v) => (set.explain = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Night mode'), seg([[false, 'Off'], [true, 'On']], !!set.night, (v) => { set.night = v; document.body.classList.toggle('night', v); })),
-      h('div', { class: 'toggle' }, h('span', {}, 'Sound'), seg([[true, 'On'], [false, 'Off']], set.sound, (v) => (set.sound = v))),
+      h('div', { class: 'toggle' }, h('span', {}, 'Music'), seg([[true, 'On'], [false, 'Off']], set.music, (v) => { set.music = v; music.setEnabled(v); })),
+      h('div', { class: 'toggle' }, h('span', {}, 'Music volume'), seg([[0.25, 'Low'], [0.5, 'Mid'], [0.9, 'High']], set.musicVol, (v) => { set.musicVol = v; music.setVolume(v); })),
+      h('div', { class: 'toggle' }, h('span', {}, 'Sound effects'), seg([[true, 'On'], [false, 'Off']], set.sound, (v) => (set.sound = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Coordinates'), seg([[true, 'On'], [false, 'Off']], set.coords, (v) => (set.coords = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Daily quest'), seg([[5, '5 min'], [10, '10 min'], [20, '20 min']], set.sessionMin, (v) => (set.sessionMin = v)))),
     win('PUZZLE SOURCES',
@@ -273,5 +276,7 @@ register('options', (el) => {
 // ---------- boot ----------
 mount(document.getElementById('app'));
 document.body.classList.toggle('night', !!S.state().settings.night);
+music.setVolume(S.state().settings.musicVol ?? 0.5);
+music.setEnabled(S.state().settings.music !== false);
 window.JG = { back };
 go('title');
