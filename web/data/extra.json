@@ -1,0 +1,380 @@
+{
+"traps": [
+{
+"id": "fried-liver",
+"name": "Fried Liver Attack",
+"side": "w",
+"kind": "spring",
+"moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3",
+"note": "After 5...Nxd5?! White sacrifices the knight on f7, drags the king out to e6 and piles on the pinned d5 knight."
+},
+{
+"id": "legal",
+"name": "Légal's Mate",
+"side": "w",
+"kind": "spring",
+"moves": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#",
+"note": "White 'gives away' the queen. If Black takes it, the minor pieces deliver mate. Named after the 18th-century French master Kermur de Légal."
+},
+{
+"id": "petrov-trap",
+"name": "Petrov Queen Trap",
+"side": "w",
+"kind": "spring",
+"moves": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Nf6 Nc6+",
+"note": "Copying with 3...Nxe4? is a mistake: 4.Qe2 pins along the e-file, and 5.Nc6+ uncovers check and attacks the queen."
+},
+{
+"id": "blackburne",
+"name": "Blackburne Shilling Gambit",
+"side": "b",
+"kind": "spring",
+"moves": "e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5 Nxf7 Qxg2 Rf1 Qxe4+ Be2 Nf3#",
+"note": "3...Nd4 looks like it drops e5, but greedy Nxe5 and Nxf7 run into a queen raid and a smothered knight mate on f3."
+},
+{
+"id": "englund",
+"name": "Englund Gambit Trap",
+"side": "b",
+"kind": "spring",
+"moves": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2 Bxc3 Qxc3 Qc1#",
+"note": "White's natural moves walk into ...Qb4+ and ...Qxb2, then ...Bb4 deflects the queen and Black mates on c1."
+},
+{
+"id": "fishing-pole",
+"name": "Fishing Pole Trap",
+"side": "b",
+"kind": "spring",
+"moves": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5 hxg4 hxg4 Nh2 Qh4 Re1 Qxh2+ Kf1",
+"note": "The knight on g4 is bait. If White takes it, the h-file opens: ...Qh4 and ...Qxh2+, backed by the rook on h8, tear White's king apart."
+},
+{
+"id": "siberian",
+"name": "Siberian Trap",
+"side": "b",
+"kind": "spring",
+"moves": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 O-O Nf6 Qe2 Ng4 h3 Nd4",
+"note": "In the Smith-Morra, ...Ng4 and ...Nd4 hit the queen and set up ...Qh2 mate. If 10.Nxd4?? Qh2#."
+},
+{
+"id": "lasker",
+"name": "Lasker Trap",
+"side": "b",
+"kind": "spring",
+"moves": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+ Ke1 Qh4+",
+"note": "In the Albin Countergambit, the pawn races to f2 and underpromotes to a knight with check. A rare chance to promote to a knight!"
+},
+{
+"id": "elephant",
+"name": "Elephant Trap",
+"side": "b",
+"kind": "spring",
+"moves": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8",
+"note": "The d5 pawn looks loose, but grabbing it lets Black unpin with ...Nxd5! — if White takes the queen, ...Bb4+ wins back more."
+},
+{
+"id": "noahs-ark",
+"name": "Noah's Ark Trap",
+"side": "b",
+"kind": "spring",
+"moves": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 d4 b5 Bb3 Nxd4 Nxd4 exd4 Qxd4 c5 Qd5 Be6 Qc6+ Bd7 Qd5 c4",
+"note": "Black's pawns (a6, b5, c4) form an 'ark' that traps White's bishop on b3."
+},
+{
+"id": "scholars-defend",
+"name": "Stopping Scholar's Mate",
+"side": "b",
+"kind": "avoid",
+"moves": "e4 e5 Qh5 Nc6 Bc4 g6 Qf3 Nf6 g4 Nd4",
+"note": "Against an early Qh5 and Bc4, guard f7 with ...g6 and ...Nf6. Then your knights can turn the tables on the white queen."
+}
+],
+"classics": [
+{
+"id": "opera",
+"name": "The Opera Game",
+"players": "Paul Morphy vs Duke of Brunswick & Count Isouard",
+"year": 1858,
+"side": "w",
+"moves": "e4 e5 Nf3 d6 d4 Bg4 dxe5 Bxf3 Qxf3 dxe5 Bc4 Nf6 Qb3 Qe7 Nc3 c6 Bg5 b5 Nxb5 cxb5 Bxb5+ Nbd7 O-O-O Rd8 Rxd7 Rxd7 Rd1 Qe6 Bxd7+ Nxd7 Qb8+ Nxb8 Rd8#",
+"story": "Played in a private box at the Paris Opera during a performance. Morphy develops fast, opens lines and finishes with a queen sacrifice and a rook mate — the perfect lesson in development."
+},
+{
+"id": "reti",
+"name": "Réti vs Tartakower",
+"players": "Richard Réti vs Savielly Tartakower",
+"year": 1910,
+"side": "w",
+"moves": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Qd3 e5 dxe5 Qa5+ Bd2 Qxe5 O-O-O Nxe4 Qd8+ Kxd8 Bg5+ Kc7 Bd8#",
+"story": "A Caro-Kann in Vienna that ends in eleven moves with a stunning queen sacrifice and a double check."
+},
+{
+"id": "lasker-thomas",
+"name": "The King Hunt",
+"players": "Edward Lasker vs George Thomas",
+"year": 1912,
+"side": "w",
+"moves": "d4 e6 Nf3 f5 Nc3 Nf6 Bg5 Be7 Bxf6 Bxf6 e4 fxe4 Nxe4 b6 Ne5 O-O Bd3 Bb7 Qh5 Qe7 Qxh7+ Kxh7 Nxf6+ Kh6 Neg4+ Kg5 h4+ Kf4 g3+ Kf3 Be2+ Kg2 Rh2+ Kg1 Kd2#",
+"story": "Played in London. A queen sacrifice on h7 drags Black's king across the whole board to g1, and White finishes with a quiet king move, Kd2, that uncovers mate."
+},
+{
+"id": "immortal",
+"name": "The Immortal Game",
+"players": "Adolf Anderssen vs Lionel Kieseritzky",
+"year": 1851,
+"side": "w",
+"moves": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 b5 Bxb5 Nf6 Nf3 Qh6 d3 Nh5 Nh4 Qg5 Nf5 c6 g4 Nf6 Rg1 cxb5 h4 Qg6 h5 Qg5 Qf3 Ng8 Bxf4 Qf6 Nc3 Bc5 Nd5 Qxb2 Bd6 Bxg1 e5 Qxa1+ Ke2 Na6 Nxg7+ Kd8 Qf6+ Nxf6 Be7#",
+"story": "A King's Gambit played in London. Anderssen gives up a bishop, both rooks and his queen, then mates with his three remaining minor pieces."
+}
+],
+"endgames": [
+{
+"id": "kqk",
+"name": "Queen mate",
+"goal": "mate",
+"side": "w",
+"fen": "8/8/8/4k3/8/8/8/4K2Q w - - 0 1",
+"limit": 30,
+"tip": "Use the queen to box the king in (a knight's move away), shrink the box, then bring your king to help. Watch out for stalemate!",
+"learn": "Push the king to the edge with the queen, then bring your own king close and mate."
+},
+{
+"id": "krk",
+"name": "Rook mate",
+"goal": "mate",
+"side": "w",
+"fen": "8/8/8/4k3/8/8/8/R3K3 w - - 0 1",
+"limit": 40,
+"tip": "Cut the king off with the rook, bring your king up to face it (opposition), then check along the edge.",
+"learn": "The rook cuts off a rank or file; your king takes the opposition; the rook gives check and the box shrinks."
+},
+{
+"id": "rr-ladder",
+"name": "Two-rook ladder",
+"goal": "mate",
+"side": "w",
+"fen": "8/8/8/4k3/8/8/8/R3K2R w - - 0 1",
+"limit": 20,
+"tip": "Rooks take turns giving check on neighbouring ranks, like climbing a ladder, until the king hits the edge.",
+"learn": "One rook guards a rank, the other checks on the next rank. Keep the rooks far from the king."
+},
+{
+"id": "kpk-win",
+"name": "King & pawn: the 6th rank",
+"goal": "promote",
+"side": "w",
+"fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+"limit": 20,
+"tip": "Your king on the 6th rank in front of the pawn wins whoever is to move. Use the opposition to escort the pawn.",
+"learn": "King in front of the pawn, on the 6th rank: a guaranteed win (except with a rook pawn)."
+},
+{
+"id": "kpk-hold",
+"name": "Hold the draw: opposition",
+"goal": "hold",
+"side": "b",
+"fen": "8/8/4k3/8/8/4K3/4P3/8 b - - 0 1",
+"limit": 25,
+"tip": "Step forward to take the opposition (kings face each other with one square between, and it's White's turn). Stay in front of the pawn; when pushed back, go straight back.",
+"learn": "The defender stays in front of the pawn and takes the opposition at the last moment."
+},
+{
+"id": "lucena",
+"name": "Lucena position",
+"goal": "promote",
+"side": "w",
+"fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+"limit": 25,
+"tip": "\"Build a bridge\": put your rook on the 4th rank (Rc4), walk the king out, and block rook checks with your rook.",
+"learn": "Rook on the 4th rank, king steps out, rook blocks the checks — the bridge."
+},
+{
+"id": "philidor",
+"name": "Hold the draw: Philidor",
+"goal": "hold",
+"side": "b",
+"fen": "4k3/8/r7/4PK2/8/8/8/7R b - - 0 1",
+"limit": 25,
+"tip": "Keep your rook on the 6th rank so the white king can't advance. When the pawn moves to e6, switch to checking from behind.",
+"learn": "Rook on the 6th rank until the pawn advances, then endless checks from behind."
+},
+{
+"id": "q-vs-p",
+"name": "Queen vs pawn on the 7th",
+"goal": "promote-stop",
+"side": "w",
+"fen": "8/8/8/8/8/8/1pk5/4KQ2 w - - 0 1",
+"limit": 30,
+"tip": "Check or pin to force the king in front of its own pawn, then bring your king one step closer. Repeat.",
+"learn": "Force the king in front of the pawn with checks, gain a tempo, walk your king closer."
+}
+],
+"structures": [
+{
+"id": "open-e",
+"name": "Open e-file games",
+"text": "After early ...exd4 or exchanges on e5, the e-file opens. Put a rook on e1/e8 quickly, watch for pins on the e-file, and fight for outposts like d5 and f5."
+},
+{
+"id": "carlsbad",
+"name": "The Carlsbad structure",
+"text": "White pawns d4/e3, Black pawns d5/c6/e6 after cxd5 exd5. White's classic plan is the minority attack: b4–b5 to give Black a weak c-pawn. Black looks for kingside play or a knight on e4."
+},
+{
+"id": "london",
+"name": "The London pyramid",
+"text": "Pawns on c3, d4, e3 make a solid base. White's knights aim for e5; Black usually counters with ...c5 and pressure on b2 and d4."
+},
+{
+"id": "fianchetto",
+"name": "Fianchetto setups",
+"text": "A bishop on g2/g7 controls the long diagonal from afar. Don't trade it lightly — without it, the squares around your king get weak."
+},
+{
+"id": "sicilian",
+"name": "Open Sicilian",
+"text": "Black has two central pawns (d6, e6/e5) vs White's one. Black uses the half-open c-file; White uses the half-open d-file and attacks the king. The d5 square is often the key outpost."
+},
+{
+"id": "french",
+"name": "French pawn chain",
+"text": "Pawns on d4–e5 vs d5–e6. Attack a chain at its base: Black hits d4 with ...c5 and e5 with ...f6. White attacks on the kingside, where the chain points."
+},
+{
+"id": "caro",
+"name": "Caro/Slav triangle",
+"text": "Pawns on c6–d5–e6 are very solid. The light-squared bishop is developed outside the chain first. Black later frees the game with ...c5 or ...e5."
+},
+{
+"id": "kid",
+"name": "King's Indian chain",
+"text": "After d5 locks the centre, White attacks on the queenside (c5, b4) and Black on the kingside (...f5, ...g5). Each side pushes the pawns that point toward the enemy king."
+},
+{
+"id": "nimzo",
+"name": "Doubled c-pawns",
+"text": "After ...Bxc3 bxc3, White has the bishop pair and a big centre, but weak doubled pawns. Black keeps the position closed and targets c4."
+}
+],
+"principles": [
+{
+"title": "Control the centre",
+"text": "Put pawns or pieces on (or aimed at) e4, d4, e5 and d5. Pieces in the centre reach more squares."
+},
+{
+"title": "Develop your pieces",
+"text": "Bring out knights and bishops before moving the same piece twice. Knights before bishops is a good habit."
+},
+{
+"title": "Castle early",
+"text": "Castling tucks the king away and connects your rooks. Aim to castle within the first 10 moves."
+},
+{
+"title": "Don't bring the queen out early",
+"text": "An early queen gets chased, and every chase gives your opponent a free developing move."
+},
+{
+"title": "Connect your rooks",
+"text": "Once minor pieces are out and you've castled, move the queen up so the rooks see each other."
+},
+{
+"title": "Watch f2 and f7",
+"text": "At the start, f2/f7 is defended only by the king. Many early traps target it."
+}
+],
+"finder": [
+{
+"q": "How do you like to play?",
+"a": [
+{
+"t": "Attack! Sacrifices are fun",
+"tags": [
+"sharp"
+]
+},
+{
+"t": "Solid and safe",
+"tags": [
+"solid"
+]
+},
+{
+"t": "A bit of both",
+"tags": [
+"balanced"
+]
+}
+]
+},
+{
+"q": "Do you enjoy memorising lines?",
+"a": [
+{
+"t": "Yes, I like theory",
+"tags": [
+"theory"
+]
+},
+{
+"t": "Some is fine",
+"tags": [
+"balanced"
+]
+},
+{
+"t": "No, give me a system",
+"tags": [
+"system"
+]
+}
+]
+},
+{
+"q": "Which do you prefer?",
+"a": [
+{
+"t": "Open positions with tactics",
+"tags": [
+"sharp"
+]
+},
+{
+"t": "Closed, strategic manoeuvring",
+"tags": [
+"solid"
+]
+},
+{
+"t": "Unbalanced, both sides attacking",
+"tags": [
+"sharp",
+"theory"
+]
+}
+]
+},
+{
+"q": "As White, which first move feels right?",
+"a": [
+{
+"t": "1.e4",
+"tags": [
+"e4"
+]
+},
+{
+"t": "1.d4",
+"tags": [
+"d4"
+]
+},
+{
+"t": "Not sure",
+"tags": [
+"system"
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.JohnsGambit" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/night</item>
+        <item name="android:statusBarColor">@color/night</item>
+        <item name="android:navigationBarColor">@color/night</item>
+    </style>
+    <color name="night">#08081A</color>
+    <color name="icon_bg">#2038A8</color>
+</resources>

@@ -1,0 +1,75 @@
+name: Build John's Gambit APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The puzzle list is big and changes rarely, so it's cached between builds.
+      - name: Restore puzzle cache
+        id: puzzles
+        uses: actions/cache@v4
+        with:
+          path: puzzle-cache/puzzles.json
+          key: puzzles-${{ hashFiles('scripts/build_puzzles.py') }}
+
+      - name: Build puzzle set from the Lichess database
+        if: steps.puzzles.outputs.cache-hit != 'true'
+        run: |
+          pip install zstandard
+          mkdir -p puzzle-cache
+          python scripts/build_puzzles.py puzzle-cache/puzzles.json
+
+      - name: Use the full puzzle set
+        run: cp puzzle-cache/puzzles.json web/data/puzzles.json
+
+      - name: Copy the game into the app
+        run: |
+          rm -rf android/app/src/main/assets/www
+          mkdir -p android/app/src/main/assets
+          cp -r web android/app/src/main/assets/www
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
+
+      - name: Build APK
+        run: gradle -p android assembleRelease --no-daemon
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk JohnsGambit.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JohnsGambit-apk
+          path: JohnsGambit.apk
+
+      # Also publish it as a "latest" release so you can download it straight on your phone.
+      - name: Publish latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: John's Gambit (latest build)
+          body: "Download JohnsGambit.apk below and open it on your phone to install or update."
+          files: JohnsGambit.apk
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: write
