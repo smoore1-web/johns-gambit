@@ -134,3 +134,9 @@ ul.b { margin: 4px 0 0; padding-left: 18px; } ul.b li { margin: 2px 0; font-size
 .tree { font-size: 20px; }
 .tree .node { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
 .spacer { flex: 1; }
+
+/* Night mode: dimmer colours for playing in the dark */
+body.night { --navy: #141C58; --navy2: #101648; --white: #B8BCC8; --gold: #C8A830; --soft: #8898C0;
+  --parch: #9C8A66; --parch2: #8A7856; --ink: #2A1A0A; --wood: #3A2814; --light: #9C8A6A; --dark: #5E4026; }
+body.night .sq img { filter: brightness(0.85); }
+body.night .title h1 { text-shadow: 4px 4px 0 #6A2400, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; }

@@ -243,6 +243,7 @@ register('options', (el) => {
   el.append(
     win('OPTIONS',
       h('div', { class: 'toggle' }, h('span', {}, 'Explanations'), seg([['auto', 'Auto'], ['beginner', 'Simple'], ['intermediate', 'Medium'], ['advanced', 'Expert']], set.explain, (v) => (set.explain = v))),
+      h('div', { class: 'toggle' }, h('span', {}, 'Night mode'), seg([[false, 'Off'], [true, 'On']], !!set.night, (v) => { set.night = v; document.body.classList.toggle('night', v); })),
       h('div', { class: 'toggle' }, h('span', {}, 'Sound'), seg([[true, 'On'], [false, 'Off']], set.sound, (v) => (set.sound = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Coordinates'), seg([[true, 'On'], [false, 'Off']], set.coords, (v) => (set.coords = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Daily quest'), seg([[5, '5 min'], [10, '10 min'], [20, '20 min']], set.sessionMin, (v) => (set.sessionMin = v)))),
@@ -263,5 +264,6 @@ register('options', (el) => {
 
 // ---------- boot ----------
 mount(document.getElementById('app'));
+document.body.classList.toggle('night', !!S.state().settings.night);
 window.JG = { back };
 go('title');
