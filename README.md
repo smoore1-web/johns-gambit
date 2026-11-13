@@ -22,4 +22,4 @@ Every push to `main` builds the APK on GitHub Actions. Download `JohnsGambit.apk
 - `scripts/build_puzzles.py` – picks ~10,000 puzzles from the Lichess puzzle database during the build.
 
 Credits: puzzles from the Lichess puzzle database (CC0); openings list from lichess-org/chess-openings (CC0);
-Stockfish.js (GPLv3); chess.js (BSD-2); pixel piece set by therealqtpi (AGPLv3); fonts Press Start 2P and VT323 (OFL).
+Stockfish.js (GPLv3); chess.js (BSD-2); fonts Press Start 2P and VT323 (OFL).

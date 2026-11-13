@@ -7,6 +7,7 @@ import { runLine } from './openings.js';
 import { playEndgame } from './endgames.js';
 import { THEME_LABEL } from './explain.js';
 import { warmUp } from './engine.js';
+import './mypuzzles.js';
 
 // ---------- title ----------
 register('title', (el) => {
@@ -247,6 +248,11 @@ register('options', (el) => {
       h('div', { class: 'toggle' }, h('span', {}, 'Sound'), seg([[true, 'On'], [false, 'Off']], set.sound, (v) => (set.sound = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Coordinates'), seg([[true, 'On'], [false, 'Off']], set.coords, (v) => (set.coords = v))),
       h('div', { class: 'toggle' }, h('span', {}, 'Daily quest'), seg([[5, '5 min'], [10, '10 min'], [20, '20 min']], set.sessionMin, (v) => (set.sessionMin = v)))),
+    win('PUZZLE SOURCES',
+      h('div', { class: 'toggle' }, h('span', {}, 'Master games'), seg([[true, 'On'], [false, 'Off']], set.sources.masters, (v) => (set.sources.masters = v))),
+      h('div', { class: 'toggle' }, h('span', {}, 'My puzzles'), seg([[true, 'On'], [false, 'Off']], set.sources.mine, (v) => (set.sources.mine = v))),
+      h('div', { class: 'toggle' }, h('span', {}, 'Extra pack (Lichess)'), seg([[true, 'On'], [false, 'Off']], set.sources.lichess, (v) => (set.sources.lichess = v))),
+      h('p', { class: 'para dim', style: 'font-size:19px' }, 'Master-game puzzles are the main set. The extra pack adds thousands more for drills and Rush.')),
     win('YOUR DATA', h('p', { class: 'para' }, 'Progress is saved on this phone. Make a backup before reinstalling.'),
       menu([
         { label: 'SAVE BACKUP', onClick: () => {
@@ -258,7 +264,7 @@ register('options', (el) => {
         { label: 'RESTORE BACKUP', onClick: () => fileIn.click() },
         resetItem,
       ]), fileIn),
-    win('ABOUT', h('p', { class: 'para' }, 'John\'s Gambit · offline chess trainer. Puzzles from the Lichess puzzle database (CC0). Engine: Stockfish (GPLv3). Pixel pieces by therealqtpi (AGPLv3).')),
+    win('ABOUT', h('p', { class: 'para' }, "John's Gambit · offline chess trainer. Main puzzles mined from historical master games with Stockfish. Optional extra pack: Lichess puzzle database (CC0). Engine: Stockfish (GPLv3). Original pixel pieces made for John's Gambit.")),
     h('section', { class: 'window' }, menu([{ label: 'BACK', onClick: back }])));
 });
 

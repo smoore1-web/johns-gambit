@@ -137,6 +137,7 @@ export function explain(puzzle, level) {
     if (a.mated) text = `${line} — forced mate. Motifs: ${list(tags) || label}.${a.captured ? ` ${a.firstSan} removes a key defender.` : ''}`;
     else text = `${line}. ${label}${tgt.length >= 2 ? ` hitting the ${list(tgt)}` : ''}; net gain ≈ ${a.gain > 0 ? '+' + a.gain : a.gain}. Motifs: ${list(tags) || label}.`;
   }
+  if (!a.mated && themes.includes('mate')) text += ' The attack leads to a forced checkmate.';
   return { title: label.toUpperCase(), text };
 }
 

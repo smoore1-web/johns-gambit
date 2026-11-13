@@ -136,7 +136,8 @@
 "fen": "8/8/8/4k3/8/8/8/4K2Q w - - 0 1",
 "limit": 30,
 "tip": "Use the queen to box the king in (a knight's move away), shrink the box, then bring your king to help. Watch out for stalemate!",
-"learn": "Push the king to the edge with the queen, then bring your own king close and mate."
+"learn": "Push the king to the edge with the queen, then bring your own king close and mate.",
+"credit": ""
 },
 {
 "id": "krk",
@@ -146,7 +147,8 @@
 "fen": "8/8/8/4k3/8/8/8/R3K3 w - - 0 1",
 "limit": 40,
 "tip": "Cut the king off with the rook, bring your king up to face it (opposition), then check along the edge.",
-"learn": "The rook cuts off a rank or file; your king takes the opposition; the rook gives check and the box shrinks."
+"learn": "The rook cuts off a rank or file; your king takes the opposition; the rook gives check and the box shrinks.",
+"credit": ""
 },
 {
 "id": "rr-ladder",
@@ -156,7 +158,8 @@
 "fen": "8/8/8/4k3/8/8/8/R3K2R w - - 0 1",
 "limit": 20,
 "tip": "Rooks take turns giving check on neighbouring ranks, like climbing a ladder, until the king hits the edge.",
-"learn": "One rook guards a rank, the other checks on the next rank. Keep the rooks far from the king."
+"learn": "One rook guards a rank, the other checks on the next rank. Keep the rooks far from the king.",
+"credit": ""
 },
 {
 "id": "kpk-win",
@@ -166,7 +169,8 @@
 "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
 "limit": 20,
 "tip": "Your king on the 6th rank in front of the pawn wins whoever is to move. Use the opposition to escort the pawn.",
-"learn": "King in front of the pawn, on the 6th rank: a guaranteed win (except with a rook pawn)."
+"learn": "King in front of the pawn, on the 6th rank: a guaranteed win (except with a rook pawn).",
+"credit": ""
 },
 {
 "id": "kpk-hold",
@@ -176,7 +180,8 @@
 "fen": "8/8/4k3/8/8/4K3/4P3/8 b - - 0 1",
 "limit": 25,
 "tip": "Step forward to take the opposition (kings face each other with one square between, and it's White's turn). Stay in front of the pawn; when pushed back, go straight back.",
-"learn": "The defender stays in front of the pawn and takes the opposition at the last moment."
+"learn": "The defender stays in front of the pawn and takes the opposition at the last moment.",
+"credit": ""
 },
 {
 "id": "lucena",
@@ -186,7 +191,8 @@
 "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
 "limit": 25,
 "tip": "\"Build a bridge\": put your rook on the 4th rank (Rc4), walk the king out, and block rook checks with your rook.",
-"learn": "Rook on the 4th rank, king steps out, rook blocks the checks — the bridge."
+"learn": "Rook on the 4th rank, king steps out, rook blocks the checks — the bridge.",
+"credit": ""
 },
 {
 "id": "philidor",
@@ -196,7 +202,8 @@
 "fen": "4k3/8/r7/4PK2/8/8/8/7R b - - 0 1",
 "limit": 25,
 "tip": "Keep your rook on the 6th rank so the white king can't advance. When the pawn moves to e6, switch to checking from behind.",
-"learn": "Rook on the 6th rank until the pawn advances, then endless checks from behind."
+"learn": "Rook on the 6th rank until the pawn advances, then endless checks from behind.",
+"credit": ""
 },
 {
 "id": "q-vs-p",
@@ -206,7 +213,41 @@
 "fen": "8/8/8/8/8/8/1pk5/4KQ2 w - - 0 1",
 "limit": 30,
 "tip": "Check or pin to force the king in front of its own pawn, then bring your king one step closer. Repeat.",
-"learn": "Force the king in front of the pawn with checks, gain a tempo, walk your king closer."
+"learn": "Force the king in front of the pawn with checks, gain a tempo, walk your king closer.",
+"credit": ""
+},
+{
+"id": "reti",
+"name": "Réti's king study",
+"credit": "Richard Réti, 1921",
+"goal": "hold",
+"side": "w",
+"fen": "7K/8/k1P5/7p/8/8/8/8 w - - 0 1",
+"limit": 20,
+"tip": "Your king can't catch the h-pawn directly — but it can chase it AND support your own pawn at the same time. Walk diagonally: Kg7!",
+"learn": "A famous study: the king hunts two goals at once with a diagonal walk. Hold the draw."
+},
+{
+"id": "saavedra",
+"name": "Saavedra position",
+"credit": "Fernando Saavedra, 1895",
+"goal": "promote",
+"side": "w",
+"fen": "8/8/1KP5/3r4/8/8/8/k7 w - - 0 1",
+"limit": 20,
+"tip": "Push c7, dodge the checks by walking up the board, and watch out at the end: promoting to a queen allows a stalemate trick. A rook does the job!",
+"learn": "One of the most famous studies ever: the winning move is an underpromotion."
+},
+{
+"id": "lasker-reichhelm",
+"name": "Lasker–Reichhelm",
+"credit": "Emanuel Lasker & Gustavus Reichhelm, 1901",
+"goal": "promote",
+"side": "w",
+"fen": "8/k7/3p4/p2P1p2/P2P1P2/8/8/K7 w - - 0 1",
+"limit": 60,
+"tip": "Everything depends on the opposition. Start with Kb1! and use the corresponding squares to win the f5 pawn.",
+"learn": "A classic king-and-pawn puzzle about distant opposition. Win a pawn and promote."
 }
 ],
 "structures": [

@@ -143,8 +143,10 @@ export class Board {
     return d ? d.dataset.sq : null;
   }
   down(e) {
+    const sq0 = this.sqAt(e);
+    if (this.opts.onSquare && sq0 && this.opts.onSquare(sq0)) return;
     if (this.locked) return;
-    const sq = this.sqAt(e);
+    const sq = sq0;
     if (!sq) return;
     const p = this.chess.get(sq);
     const mine = p && p.color === this.chess.turn() && (!this.opts.canMove || this.opts.canMove(p.color));

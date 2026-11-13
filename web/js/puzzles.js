@@ -1,6 +1,7 @@
 // Puzzle Forest, Tactics Village and Rush Arena, plus the shared puzzle player.
 import { h, win, menu, cmd, register, go, back, sfx, toast } from './ui.js';
 import { Board } from './board.js';
+import { Chess } from './vendor/chess.js';
 import * as S from './store.js';
 import * as D from './data.js';
 import { explain, hints, levelFor, THEME_LABEL, mainTheme } from './explain.js';
@@ -32,15 +33,37 @@ export async function pickPuzzle({ theme = null, rating = S.state().rating, excl
 
 const uciMove = (u) => ({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
 
+// Hints and notes for puzzles you added yourself (the solver moves first)
+function ownHints(p) {
+  const c = new Chess(p.fen);
+  const m = p.moves.split(' ')[0];
+  const pc = c.get(m.slice(0, 2));
+  const names = { k: 'king', q: 'queen', r: 'rook', b: 'bishop', n: 'knight', p: 'pawn' };
+  const t = p.themes ? mainTheme(p.themes.split(' ')) : null;
+  return [
+    { text: t ? `Theme: ${(THEME_LABEL[t] || t).toUpperCase()}.` : 'Look for checks, captures and threats.' },
+    { text: `The ${names[pc.type]} on ${m.slice(0, 2)} makes the key move.` },
+    { text: `Move it to ${m.slice(2, 4)}.` },
+  ];
+}
+function ownExplain(p) {
+  const c = new Chess(p.fen);
+  const sans = p.moves.split(' ').map((u) => c.move(uciMove(u)).san);
+  const t = p.themes ? mainTheme(p.themes.split(' ')) : null;
+  return { title: t ? (THEME_LABEL[t] || t).toUpperCase() : 'YOUR PUZZLE', text: `Solution: ${sans.join(' ')}.${p.book ? ` (${p.book}${p.page ? ', p.' + p.page : ''})` : ''}` };
+}
+
 // ---------- the puzzle player ----------
 // opts: { mode: 'rated'|'review'|'theme'|'rush'|'quest', title, onDone(result), onNext, allowHints, quiet }
 export function playPuzzle(el, puzzle, opts = {}) {
   const st = S.state();
   const moves = puzzle.moves.split(' ');
   const themes = puzzle.themes.split(' ');
-  const hintList = hints(puzzle);
+  const solverFirst = !!puzzle.solverFirst;
+  const off = solverFirst ? 0 : 1;
+  const hintList = solverFirst ? ownHints(puzzle) : hints(puzzle);
   const allowHints = opts.allowHints !== false;
-  let idx = 1, failed = false, hintsUsed = 0, done = false, blind = !!opts.blind, timers = [];
+  let idx = off, failed = false, hintsUsed = 0, done = false, blind = !!opts.blind, timers = [];
 
   const status = h('section', { class: 'window tight status' });
   const msgTitle = h('div', { class: 'title-sm' });
@@ -53,11 +76,15 @@ export function playPuzzle(el, puzzle, opts = {}) {
 
   const board = new Board(boardEl, {
     coords: st.settings.coords,
-    canMove: (c) => !done && c === board.chess.turn() && idx % 2 === 1,
+    canMove: (c) => !done && c === board.chess.turn() && (idx - off) % 2 === 0,
     onMove: (uci) => attempt(uci),
   });
   board.load(puzzle.fen);
-  const me = puzzle.fen.split(' ')[1] === 'w' ? 'b' : 'w';
+  const toMove = puzzle.fen.split(' ')[1];
+  const me = solverFirst ? toMove : (toMove === 'w' ? 'b' : 'w');
+  const st0 = puzzle.story;
+  const hero = st0 ? (me === 'w' ? st0.white : st0.black) : null;
+  const storyLine = st0 ? `${st0.white} vs ${st0.black}${st0.year ? ', ' + st0.year : ''}` : (puzzle.book ? `${puzzle.book}${puzzle.page ? ', p.' + puzzle.page : ''}` : null);
   board.setOrientation(me);
   board.setBlind(blind);
   board.lock(true);
@@ -66,7 +93,7 @@ export function playPuzzle(el, puzzle, opts = {}) {
   function drawStatus() {
     status.innerHTML = '';
     status.append(
-      h('span', { class: 'px' }, opts.title || 'PUZZLE'),
+      h('span', { class: 'px' }, (opts.title || 'PUZZLE') + (puzzle.source === 'master' && !opts.title?.includes('MASTER') ? ' ♛' : '')),
       opts.mode === 'rush' ? h('span', {}, '') : h('span', {}, `★ ${puzzle.rating}`),
       allowHints ? h('span', { class: 'gold' }, 'HINTS ' + stars()) : h('span', {}, ''));
   }
@@ -82,7 +109,10 @@ export function playPuzzle(el, puzzle, opts = {}) {
   function prompt() {
     const side = me === 'w' ? 'WHITE' : 'BLACK';
     if (blind) say(`${side} TO MOVE (BLINDFOLD)`, blindText());
-    else say(`${side} TO MOVE`, idx > 1 ? 'Good! Keep going…' : 'Find the best move! Tap a piece, then its square.');
+    else if (idx > off) say(`${side} TO MOVE`, 'Good! Keep going…');
+    else if (hero) say(`${side} TO MOVE`, `${storyLine}. Find ${hero}'s move!`);
+    else if (storyLine) say(`${side} TO MOVE`, `From ${storyLine}. Find the best move!`);
+    else say(`${side} TO MOVE`, 'Find the best move! Tap a piece, then its square.');
   }
   function drawCmds() {
     cmds.innerHTML = '';
@@ -110,7 +140,7 @@ export function playPuzzle(el, puzzle, opts = {}) {
     const cur = moves[idx];
     if (hintsUsed >= 2) { board.clearMarks(); board.mark(cur.slice(0, 2), 'hint'); }
     if (hintsUsed === 3) { board.clearArrows(); board.arrow(cur.slice(0, 2), cur.slice(2, 4)); }
-    const text = idx === 1 ? hnt.text : (hintsUsed === 1 ? hnt.text : hintsUsed === 2 ? `Move the piece on ${cur.slice(0, 2)}.` : `Move it to ${cur.slice(2, 4)}.`);
+    const text = idx === off ? hnt.text : (hintsUsed === 1 ? hnt.text : hintsUsed === 2 ? `Move the piece on ${cur.slice(0, 2)}.` : `Move it to ${cur.slice(2, 4)}.`);
     say(`HINT ${hintsUsed}`, text);
     drawStatus(); drawCmds();
   }
@@ -178,7 +208,8 @@ export function playPuzzle(el, puzzle, opts = {}) {
     }
     if (opts.quiet) { opts.onDone && opts.onDone(result); return; }
     const lvl = levelFor(st.rating, st.settings.explain);
-    const why = explain(puzzle, lvl);
+    const why = solverFirst ? ownExplain(puzzle) : explain(puzzle, lvl);
+    if (hero) why.text += ` ${hero} played it in ${st0.year || 'the game'}.`;
     if (grade === 2) { sfx('good'); say(`VICTORY! ${why.title}`, why.text + (result.delta != null ? `  (${result.delta >= 0 ? '+' : ''}${result.delta})` : '') + (hintsUsed === 0 ? '  Found without help!' : ''), 'win'); }
     else if (grade === 1) { sfx('good'); say(`SOLVED WITH HELP · ${why.title}`, why.text + ' It will come back sooner for review.', 'win'); }
     else { sfx('bad'); say(`LEARN IT · ${why.title}`, why.text + ' This puzzle will come back soon.', 'lose'); }
@@ -186,11 +217,15 @@ export function playPuzzle(el, puzzle, opts = {}) {
     opts.onDone && opts.onDone(result);
   }
 
-  drawStatus(); say('GET READY…', 'Watch your opponent\'s move.'); drawCmds();
-  timers.push(setTimeout(() => {
-    const r = board.play(moves[0]); sfx(r && r.captured ? 'capture' : 'move');
-    board.lock(false); prompt(); drawCmds();
-  }, 700));
+  drawStatus(); drawCmds();
+  if (solverFirst) { board.lock(false); prompt(); }
+  else {
+    say('GET READY…', storyLine ? `${storyLine}. Watch the move…` : 'Watch your opponent\'s move.');
+    timers.push(setTimeout(() => {
+      const r = board.play(moves[0]); sfx(r && r.captured ? 'capture' : 'move');
+      board.lock(false); prompt(); drawCmds();
+    }, 700));
+  }
   return { stop: () => timers.forEach(clearTimeout), board };
 }
 
@@ -199,11 +234,12 @@ register('forest', (el) => {
   const st = S.state();
   const dueN = S.dueCount('pz:');
   el.append(
-    win('PUZZLE FOREST', h('p', { class: 'para' }, 'Real puzzles from master-checked games. Each one ends with a "why" note, and any you miss come back for review.')),
+    win('PUZZLE FOREST', h('p', { class: 'para' }, 'Puzzles from famous master games — find the move the champion played. Each one ends with a "why" note, and any you miss come back for review.')),
     h('section', { class: 'window' }, menu([
       { label: 'NEW PUZZLE', sub: `rating ${st.rating}`, onClick: () => go('puzzle', { mode: 'rated' }) },
       { label: 'REVIEWS', sub: `${dueN} due`, onClick: () => dueN ? go('puzzle', { mode: 'review' }) : toast('NO REVIEWS DUE'), },
       { label: 'BLINDFOLD PUZZLE', sub: 'pieces hidden', onClick: () => go('puzzle', { mode: 'rated', blind: true }) },
+      { label: 'MY PUZZLES', sub: `${D.mine().length}`, onClick: () => go('mypuzzles') },
       { label: 'WEAKEST THEME', sub: (S.weakThemes(TACTIC_THEMES)[0] ? THEME_LABEL[S.weakThemes(TACTIC_THEMES)[0].t] : 'needs data'), onClick: () => { const w = S.weakThemes(TACTIC_THEMES)[0]; w ? go('puzzle', { mode: 'theme', theme: w.t }) : toast('PLAY MORE FIRST'); } },
       { label: 'BACK TO MAP', onClick: back },
     ])),

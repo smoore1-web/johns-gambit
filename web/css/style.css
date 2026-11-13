@@ -13,6 +13,7 @@ body { font-family: 'VT', monospace; font-size: 22px; line-height: 1.15; user-se
 #app { position: relative; max-width: 480px; margin: 0 auto; min-height: 100%; height: 100dvh; overflow: hidden; }
 .screen { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 12px; padding: 14px 14px 18px; overflow-y: auto; }
 .px { font-family: 'PS2P', monospace; font-weight: 400; }
+.screen > * { flex-shrink: 0; }
 h1, h2, h3, p { margin: 0; }
 button { font: inherit; color: inherit; }
 .gold { color: var(--gold); } .green { color: var(--green); } .red { color: var(--red); } .soft { color: var(--soft); } .dim { color: var(--dim); }

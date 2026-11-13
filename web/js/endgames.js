@@ -21,7 +21,7 @@ register('endgames', async (el) => {
   const list = h('div', { class: 'list' });
   for (const g of ex.endgames) {
     list.append(h('button', { class: 'item', onClick: () => { sfx('select'); go('endgame', { id: g.id }); } },
-      h('span', { class: `dotc ${status(g.id)}` }), g.name, h('span', { class: 'meta' }, GOAL[g.goal])));
+      h('span', { class: `dotc ${status(g.id)}` }), h('span', {}, g.name, g.credit ? h('br') : null, g.credit ? h('span', { class: 'soft', style: 'font-size:18px' }, g.credit) : null), h('span', { class: 'meta' }, GOAL[g.goal])));
   }
   el.append(list, h('section', { class: 'window' }, menu([{ label: 'BACK TO MAP', onClick: back }])));
 });
@@ -50,7 +50,7 @@ export function playEndgame(el, g, { quest, onDone } = {}) {
     else cmds.append(quest ? cmd('CONTINUE', () => onDone && onDone()) : cmd('TRY AGAIN', restart), quest ? null : cmd('BACK', back));
   }
   function restart() { moves = 0; done = false; slipped = false; board.load(g.fen); board.lock(false); intro(); drawCmds(); drawSt(); }
-  function intro() { say(GOAL[g.goal].toUpperCase(), g.learn + (g.goal === 'hold' ? ` Survive ${g.limit} moves.` : ` You have ${g.limit} moves.`)); }
+  function intro() { say(GOAL[g.goal].toUpperCase() + (g.credit ? ' · ' + g.credit.toUpperCase() : ''), g.learn + (g.goal === 'hold' ? ` Survive ${g.limit} moves.` : ` You have ${g.limit} moves.`)); }
 
   function userEval(r) {
     if (!r.score) return 0;
