@@ -152,11 +152,14 @@ body.night .title h1 { text-shadow: 4px 4px 0 #6A2400, -2px -2px 0 #000, 2px -2p
   .msg p, .para { font-size: 24px; }
 
   /* Board screens: big board on the left, panels on the right */
-  .stage { display: grid !important; grid-template-columns: minmax(0, min(calc(100vh - 60px), 680px)) minmax(340px, 1fr);
+  .stage { display: grid !important; grid-template-columns: min(calc(100vh - 60px), 680px, 58vw) minmax(320px, 1fr);
            grid-auto-rows: min-content; column-gap: 28px; row-gap: 16px; align-content: start; justify-content: center; }
   .stage > .board-wrap { grid-column: 1; grid-row: 1 / span 30; width: 100%; max-width: calc(100vh - 60px); align-self: start; }
   .stage > *:not(.board-wrap) { grid-column: 2; min-width: 0; }
   .stage .msg { min-height: 150px; }
+  /* screens with a bar above the board (Rush, Daily Quest): leave room for it */
+  .screen:has(> .stage) > .stage { grid-template-columns: min(calc(100vh - 140px), 680px, 58vw) minmax(320px, 1fr); }
+  .screen:has(> .stage) > .stage > .board-wrap { max-width: calc(100vh - 140px); }
   .stage .cmds { grid-template-columns: 1fr 1fr; }
   .sq .co { font-size: 16px; }
 
@@ -171,7 +174,7 @@ body.night .title h1 { text-shadow: 4px 4px 0 #6A2400, -2px -2px 0 #000, 2px -2p
   .map .pawn { width: 40px; height: 40px; }
 
   /* Reading and menu screens: two columns of windows */
-  .screen:not(.stage):not(.mapscreen):not(.title) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  .screen:not(.stage):not(.mapscreen):not(.title):not(:has(.stage)) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 28px; row-gap: 18px; align-items: start; align-content: start; grid-auto-flow: row dense; }
   .list { display: grid; grid-template-columns: 1fr; gap: 10px; }
 
@@ -185,5 +188,5 @@ body.night .title h1 { text-shadow: 4px 4px 0 #6A2400, -2px -2px 0 #000, 2px -2p
   .title .tag { font-size: 30px; }
 }
 @media (min-width: 1500px) and (min-aspect-ratio: 5/4) {
-  .screen:not(.stage):not(.mapscreen):not(.title) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .screen:not(.stage):not(.mapscreen):not(.title):not(:has(.stage)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
