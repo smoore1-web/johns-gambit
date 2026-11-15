@@ -141,3 +141,49 @@ body.night { --navy: #141C58; --navy2: #101648; --white: #B8BCC8; --gold: #C8A83
   --parch: #9C8A66; --parch2: #8A7856; --ink: #2A1A0A; --wood: #3A2814; --light: #9C8A6A; --dark: #5E4026; }
 body.night .sq img { filter: brightness(0.85); }
 body.night .title h1 { text-shadow: 4px 4px 0 #6A2400, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; }
+
+/* ---------- Wide screens (computers, tablets in landscape) ---------- */
+@media (min-width: 900px) and (min-aspect-ratio: 5/4) {
+  #app { max-width: 1280px; }
+  body { font-size: 24px; }
+  .screen { padding: 22px 28px 28px; gap: 16px; }
+  .menu button, .cmd { font-size: 13px; }
+  .title-sm { font-size: 12px; }
+  .msg p, .para { font-size: 24px; }
+
+  /* Board screens: big board on the left, panels on the right */
+  .stage { display: grid !important; grid-template-columns: minmax(0, min(calc(100vh - 60px), 680px)) minmax(340px, 1fr);
+           grid-auto-rows: min-content; column-gap: 28px; row-gap: 16px; align-content: start; justify-content: center; }
+  .stage > .board-wrap { grid-column: 1; grid-row: 1 / span 30; width: 100%; max-width: calc(100vh - 60px); align-self: start; }
+  .stage > *:not(.board-wrap) { grid-column: 2; min-width: 0; }
+  .stage .msg { min-height: 150px; }
+  .stage .cmds { grid-template-columns: 1fr 1fr; }
+  .sq .co { font-size: 16px; }
+
+  /* World map: map on the left, info on the right */
+  .mapscreen { display: grid; grid-template-columns: minmax(0, calc((100vh - 60px) * 354 / 470)) minmax(340px, 420px);
+               grid-auto-rows: min-content; column-gap: 28px; row-gap: 16px; justify-content: center; align-content: start; }
+  .mapscreen > .map { grid-column: 1; grid-row: 1 / span 10; }
+  .mapscreen > *:not(.map) { grid-column: 2; }
+  .map .place .ic { font-size: 40px; }
+  .map .place .lb { font-size: 22px; }
+  .map .realm { font-size: 12px; }
+  .map .pawn { width: 40px; height: 40px; }
+
+  /* Reading and menu screens: two columns of windows */
+  .screen:not(.stage):not(.mapscreen):not(.title) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 28px; row-gap: 18px; align-items: start; align-content: start; grid-auto-flow: row dense; }
+  .list { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+  /* Title screen: title and menu on the left, the realm map on the right */
+  .title { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-auto-rows: min-content;
+           justify-items: center; align-content: center; column-gap: 40px; row-gap: 16px; }
+  .title > *:not(.map):not(.stars) { grid-column: 1; }
+  .title > .map { grid-column: 2; grid-row: 1 / span 6; align-self: center; max-width: 620px; aspect-ratio: 354 / 300; }
+  .title h1 { font-size: 44px; }
+  .title .king { width: 110px; height: 110px; }
+  .title .tag { font-size: 30px; }
+}
+@media (min-width: 1500px) and (min-aspect-ratio: 5/4) {
+  .screen:not(.stage):not(.mapscreen):not(.title) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

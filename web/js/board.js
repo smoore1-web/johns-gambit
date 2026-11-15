@@ -32,6 +32,8 @@ export class Board {
     this.svg.setAttribute('class', 'arrows');
     this.svg.innerHTML = '<defs><marker id="ah" markerWidth="3" markerHeight="3" refX="1.5" refY="1.5" orient="auto"><path d="M0,0 L3,1.5 L0,3 z" fill="#F8D030"/></marker></defs>';
     this.el.append(this.grid, this.svg);
+    // lets wide screens put the board on the left and the panels on the right
+    if (this.el.parentElement) this.el.parentElement.classList.add('stage');
     this.squares = {};
     for (let i = 0; i < 64; i++) {
       const d = document.createElement('div');

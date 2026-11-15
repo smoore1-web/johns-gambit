@@ -51,6 +51,7 @@ const PLACES = [
 let mapSel = 'forest';
 
 register('map', (el) => {
+  el.classList.add('mapscreen');
   const st = S.state();
   const lv = S.level();
   const dueAll = S.dueCount('');
