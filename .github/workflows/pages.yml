@@ -51,8 +51,6 @@ jobs:
           python scripts/make_sw.py "${GITHUB_RUN_NUMBER}"
 
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
