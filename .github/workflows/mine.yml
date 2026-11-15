@@ -52,5 +52,6 @@ jobs:
           git pull --rebase -q origin main
           git push origin HEAD:main
           gh workflow run build.yml
+          gh workflow run pages.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

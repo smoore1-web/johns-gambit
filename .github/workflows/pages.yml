@@ -1,0 +1,62 @@
+name: Publish website
+
+# Publishes the game as a website on GitHub Pages:
+# https://smoore1-web.github.io/johns-gambit/
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "data/mined_games.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore puzzle cache
+        id: puzzles
+        uses: actions/cache@v4
+        with:
+          path: puzzle-cache/puzzles.json
+          key: puzzles-${{ hashFiles('scripts/build_puzzles.py') }}
+
+      - name: Build puzzle set from the Lichess database
+        if: steps.puzzles.outputs.cache-hit != 'true'
+        run: |
+          pip install zstandard
+          mkdir -p puzzle-cache
+          python scripts/build_puzzles.py puzzle-cache/puzzles.json
+
+      - name: Prepare the site
+        run: |
+          cp puzzle-cache/puzzles.json web/data/puzzles.json
+          python scripts/make_sw.py "${GITHUB_RUN_NUMBER}"
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -279,4 +279,8 @@ document.body.classList.toggle('night', !!S.state().settings.night);
 music.setVolume(S.state().settings.musicVol ?? 0.5);
 music.setEnabled(S.state().settings.music !== false);
 window.JG = { back };
+// Website version: work offline and allow 'Add to Home screen' (not needed inside the Android app)
+if ('serviceWorker' in navigator && !window.Android && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 go('title');
